@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Запобігаємо кешуванню (працює для нових URL) -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -11,38 +12,26 @@
   <title>Abrir SMS / Open SMS</title>
 
   <script>
-    // ===============================
-    // Задаємо номер і текст SMS один раз
-    // ===============================
-    const phoneNumber = '+351925746023';  // <-- тут змінюєш номер
-    const smsBody = 'SN3618OTGC';     // <-- тут змінюєш текст
+    // Задаєш тут номер та текст (єдине місце для редагування)
+    const phoneNumber = '+351925746023';
+    const smsBody = 'SN3618OTGCTEST';
 
-    // Унікальний параметр для обходу кешу GitHub Pages
-    // Це число може бути версією або timestamp
-    const pageVersion = Date.now(); // або просто const pageVersion = 2;
+    // Унікальний параметр для SMS, щоб не брати кеш навіть всередині браузера
+    const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${Date.now()}`;
 
-    // Створюємо URL сторінки з параметром версії
-    const pageUrl = `${window.location.pathname}?v=${pageVersion}`;
-
-    // Якщо поточний URL вже не містить параметру версії, перезавантажуємо
-    if (!window.location.search.includes('v=')) {
-      window.location.replace(pageUrl);
-    }
-
-    // Генеруємо URL для SMS з унікальним параметром
-    const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${pageVersion}`;
-
-    // Автоматичне перенаправлення на SMS
-    window.location.replace(smsUrl);
+    // Автоматичне відкриття SMS
+    window.onload = function () {
+      window.location.href = smsUrl;
+    };
   </script>
 </head>
 <body>
   <p>
     Abrindo SMS… Se nada acontecer, <br>
     Opening SMS… If nothing happens, <br>
-    <a id="smslink" href="#" onclick="
+    <a href="#" onclick="
       const url = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${Date.now()}`;
-      window.location.replace(url);
+      window.location.href = url;
       return false;
     ">Clique aqui / Click here</a>.
   </p>
