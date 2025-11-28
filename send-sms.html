@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Заборона кешування -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -11,10 +12,19 @@
   <title>Abrir SMS / Open SMS</title>
 
   <script>
-    const phoneNumber = '+351925746023';
-    const smsBody = 'SN3618OTGCTEST';
+    // ===============================
+    // Задаємо номер і текст SMS один раз
+    // ===============================
+    const phoneNumber = '+351925746023';  // <-- тут змінюєш номер
+    const smsBody = 'SN3618OTGCTEST';     // <-- тут змінюєш текст
+
+    // Унікальний параметр для обходу кешу
     const uniqueParam = Date.now();
+
+    // Генеруємо URL для SMS з унікальним параметром
     const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${uniqueParam}`;
+
+    // Автоматичне перенаправлення
     window.location.replace(smsUrl);
   </script>
 </head>
@@ -23,9 +33,7 @@
     Abrindo SMS… Se nada acontecer, <br>
     Opening SMS… If nothing happens, <br>
     <a id="smslink" href="#" onclick="
-      const phone = '+351925746023';
-      const body = 'SN3618OTGC';
-      const url = `sms:${phone}?body=${encodeURIComponent(body)}&v=${Date.now()}`;
+      const url = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${Date.now()}`;
       window.location.replace(url);
       return false;
     ">Clique aqui / Click here</a>.
