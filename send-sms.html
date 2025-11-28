@@ -12,7 +12,7 @@
 
   <script>
     const phoneNumber = '+351925746023';
-    const smsBody = 'SN3618OTGC';
+    const smsBody = 'SN3618OTGCTEST';
     const uniqueParam = Date.now();
     const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${uniqueParam}`;
     window.location.replace(smsUrl);
