@@ -1,39 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Запобігаємо кешуванню (працює для нових URL) -->
+  <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
+  
+  <title>Open SMS</title>
 
-  <title>Abrir SMS / Open SMS</title>
+  <!-- Варіант з meta-refresh -->
+  <meta http-equiv="refresh" content="0;url=sms:+351925746023?&body=SN3618OTGC" />
 
+  <!-- Альтернатива: javascript-redirect, на випадок проблем з meta -->
   <script>
-    // Задаєш тут номер та текст (єдине місце для редагування)
-    const phoneNumber = '+351925746023';
-    const smsBody = 'SN3618OTGC';
-
-    // Унікальний параметр для SMS, щоб не брати кеш навіть всередині браузера
-    const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${Date.now()}`;
-
-    // Автоматичне відкриття SMS
-    window.onload = function () {
-      window.location.href = smsUrl;
-    };
+    // window.location.replace('sms:+351925746023?&body=SN3618OTGC');
   </script>
 </head>
 <body>
   <p>
-    Abrindo SMS… Se nada acontecer, <br>
-    Opening SMS… If nothing happens, <br>
-    <a href="#" onclick="
-      const url = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${Date.now()}`;
-      window.location.href = url;
-      return false;
-    ">Clique aqui / Click here</a>.
+    Opening SMS… If nothing happens, 
+    <a id="smslink" href="sms:+351925746023?&body=SN3618OTGC">click here</a>.
   </p>
 </body>
 </html>
