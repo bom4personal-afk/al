@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Заборона кешування -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -16,15 +15,24 @@
     // Задаємо номер і текст SMS один раз
     // ===============================
     const phoneNumber = '+351925746023';  // <-- тут змінюєш номер
-    const smsBody = 'SN3618OTGC';     // <-- тут змінюєш текст
+    const smsBody = 'SN3618OTGCTEST';     // <-- тут змінюєш текст
 
-    // Унікальний параметр для обходу кешу
-    const uniqueParam = Date.now();
+    // Унікальний параметр для обходу кешу GitHub Pages
+    // Це число може бути версією або timestamp
+    const pageVersion = Date.now(); // або просто const pageVersion = 2;
+
+    // Створюємо URL сторінки з параметром версії
+    const pageUrl = `${window.location.pathname}?v=${pageVersion}`;
+
+    // Якщо поточний URL вже не містить параметру версії, перезавантажуємо
+    if (!window.location.search.includes('v=')) {
+      window.location.replace(pageUrl);
+    }
 
     // Генеруємо URL для SMS з унікальним параметром
-    const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${uniqueParam}`;
+    const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(smsBody)}&v=${pageVersion}`;
 
-    // Автоматичне перенаправлення
+    // Автоматичне перенаправлення на SMS
     window.location.replace(smsUrl);
   </script>
 </head>
