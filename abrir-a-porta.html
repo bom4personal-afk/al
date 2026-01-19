@@ -45,21 +45,30 @@
 <button id="btn">TEST</button>
 
 <script>
+const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev";
+const SECRET = "banana-coffee-robot";
+
 document.getElementById("btn").onclick = async () => {
   try {
-    const res = await fetch("https://ewelink-button.wl-image-proxy.workers.dev", {
-      method: "POST"
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "x-key": SECRET
+      }
     });
+
     const data = await res.json();
-    alert(JSON.stringify(data));
+    alert(data.ok ? "OK" : "Fail");
   } catch (e) {
-    alert("error: " + e.message);
+    alert("error");
   }
 };
 </script>
 
+
 </body>
 </html>
+
 
 
 
