@@ -42,25 +42,17 @@
 </head>
 
 <body>
-  <div class="wrapper">
-    <button id="btn">Abrir / Open</button>
-  </div>
-
-  <script>
-  const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev";
-
-  document.getElementById("btn").onclick = async () => {
-    try {
-      const res = await fetch(WORKER_URL);
-      const data = await res.json();
-      alert(JSON.stringify(data));
-    } catch (e) {
-      alert("fetch error: " + e.message);
-    }
-  };
-  </script>
+<button onclick="test()">TEST</button>
+<script>
+function test() {
+  fetch("https://cloudflare.com")
+    .then(() => alert("fetch ok"))
+    .catch(e => alert("fetch error: " + e.message));
+}
+</script>
 </body>
 </html>
+
 
 
 
