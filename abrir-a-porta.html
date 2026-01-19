@@ -47,27 +47,21 @@
   </div>
 
   <script>
-    const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev";
+  const WORKER_URL = "https://ТВІЙ-WORKER.workers.dev";
 
-    document.getElementById("btn").onclick = async () => {
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST"
-        });
-
-        if (!res.ok) {
-          alert("Помилка");
-          return;
-        }
-
-        alert("Готово");
-      } catch (e) {
-        alert("Нема звʼязку");
-      }
-    };
+  document.getElementById("btn").onclick = async () => {
+    try {
+      const res = await fetch(WORKER_URL);
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    } catch (e) {
+      alert("fetch error: " + e.message);
+    }
+  };
   </script>
 </body>
 </html>
+
 
 
 
