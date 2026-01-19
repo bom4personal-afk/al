@@ -15,6 +15,7 @@
     .wrapper {
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -34,18 +35,43 @@
       transform: scale(0.97);
       background: #16a34a;
     }
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <button id="btn">Abrir / Open</button>
+    <h3 id="pt-text">Para abrir a porta do prédio, pressione o botão.</h3>
+    <h3 id="en-text">To open the building door, press the button.</h3>
+    <button id="btn">Abrir prédio / Open building</button>
   </div>
 
   <script>
     const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev"; // твій воркер
     const SECRET = "banana-coffee-robot";
+    const BUTTON = document.getElementById("btn");
+    const PT_TEXT = document.getElementById("pt-text");
+    const EN_TEXT = document.getElementById("en-text");
+    const WAIT_TIME = 15; // секунд
 
-    document.getElementById("btn").onclick = async () => {
+    BUTTON.onclick = async () => {
+      // Дезактивація кнопки і зміна тексту
+      BUTTON.disabled = true;
+      let countdown = WAIT_TIME;
+      BUTTON.textContent = `Aguardar / Wait ${countdown}s`;
+
+      const timer = setInterval(() => {
+        countdown--;
+        BUTTON.textContent = `Aguardar / Wait ${countdown}s`;
+        if (countdown <= 0) {
+          clearInterval(timer);
+          BUTTON.disabled = false;
+          BUTTON.textContent = "Abrir prédio / Open building";
+        }
+      }, 1000);
+
       try {
         const res = await fetch(WORKER_URL, {
           method: "POST",
@@ -53,9 +79,14 @@
         });
 
         const data = await res.json();
-        alert(data.ok ? "OK" : `Fail: ${data.error}`);
+        // тут можна додати alert, якщо потрібно:
+        // alert(data.ok ? "✅ OK" : "❌ Fail");
       } catch (e) {
         alert("error: " + e.message);
+        // у випадку помилки кнопка теж відновлюється
+        clearInterval(timer);
+        BUTTON.disabled = false;
+        BUTTON.textContent = "Abrir prédio / Open building";
       }
     };
   </script>
