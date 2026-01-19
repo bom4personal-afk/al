@@ -42,16 +42,25 @@
 </head>
 
 <body>
-<button onclick="test()">TEST</button>
+<button id="btn">TEST</button>
+
 <script>
-function test() {
-  fetch("https://cloudflare.com")
-    .then(() => alert("fetch ok"))
-    .catch(e => alert("fetch error: " + e.message));
-}
+document.getElementById("btn").onclick = async () => {
+  try {
+    const res = await fetch("https://ewelink-button.wl-image-proxy.workers.dev", {
+      method: "POST"
+    });
+    const data = await res.json();
+    alert(JSON.stringify(data));
+  } catch (e) {
+    alert("error: " + e.message);
+  }
+};
 </script>
+
 </body>
 </html>
+
 
 
 
