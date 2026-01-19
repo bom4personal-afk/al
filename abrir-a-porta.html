@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open the door</title>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .wrapper {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      width: 80%;
+      max-width: 320px;
+      padding: 24px;
+      font-size: 20px;
+      border: none;
+      border-radius: 16px;
+      background: #22c55e;
+      color: #022c22;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+      background: #16a34a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <button id="btn">Abrir / Open</button>
+  </div>
+
+  <script>
+    const WORKER_URL = "https://https://ewelink-button.wl-image-proxy.workers.dev/";
+
+    document.getElementById("btn").onclick = async () => {
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST"
+        });
+
+        if (!res.ok) {
+          alert("Помилка");
+          return;
+        }
+
+        alert("Готово");
+      } catch (e) {
+        alert("Нема звʼязку");
+      }
+    };
+  </script>
+</body>
+</html>
