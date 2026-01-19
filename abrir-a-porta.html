@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Open the door</title>
-
   <style>
     html, body {
       height: 100%;
@@ -13,14 +12,12 @@
       background: #0f172a;
       color: #fff;
     }
-
     .wrapper {
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
     button {
       width: 80%;
       max-width: 320px;
@@ -33,46 +30,34 @@
       cursor: pointer;
       transition: transform 0.1s ease, background 0.2s ease;
     }
-
     button:active {
       transform: scale(0.97);
       background: #16a34a;
     }
   </style>
 </head>
-
 <body>
-<button id="btn">TEST</button>
+  <div class="wrapper">
+    <button id="btn">Abrir / Open</button>
+  </div>
 
-<script>
-const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev";
-const SECRET = "banana-coffee-robot";
+  <script>
+    const WORKER_URL = "https://ewelink-button.wl-image-proxy.workers.dev"; // твій воркер
+    const SECRET = "banana-coffee-robot";
 
-document.getElementById("btn").onclick = async () => {
-  try {
-    const res = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "x-key": SECRET
+    document.getElementById("btn").onclick = async () => {
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "x-key": SECRET }
+        });
+
+        const data = await res.json();
+        alert(data.ok ? "OK" : `Fail: ${data.error}`);
+      } catch (e) {
+        alert("error: " + e.message);
       }
-    });
-
-    const data = await res.json();
-    alert(data.ok ? "OK" : "Fail");
-  } catch (e) {
-    alert("error");
-  }
-};
-</script>
-
-
+    };
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
