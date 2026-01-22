@@ -68,8 +68,8 @@
     if (blockedUntil && now < blockedUntil) {
       BUTTON.disabled = true;
       // залишаємо повідомлення про ключ
-      PT_TEXT.textContent = "Por favor, use a chave, ela está na sala sobre a mesa. Obrigado!";
-      EN_TEXT.textContent = "Please use the key, it is hanging in the room above the table. Thank you!";
+      PT_TEXT.textContent = "Seja bem-vindo! Para as entradas seguintes, por favor, use a chave física, que está pendurada acima da secretária do seu quarto. Obrigado!";
+      EN_TEXT.textContent = "Welcome! For the next entries, please use the physical key, which is hanging above the desk in your room. Thank you!";
       const updateCountdown = () => {
         const msLeft = blockedUntil - Date.now();
         if (msLeft <= 0) {
@@ -92,8 +92,8 @@
 
       // --- повідомлення після першого натискання ---
       if (clicks === 1) {
-        PT_TEXT.textContent = "Por favor, use a chave que está pendurada no quarto acima da mesa daqui para frente. Obrigado!";
-        EN_TEXT.textContent = "Please use the key that is hanging in the room above the desk from now on. Thank you!";
+        PT_TEXT.textContent = "Seja bem-vindo! Para as entradas seguintes, por favor, use a chave física, que está pendurada acima da secretária do seu quarto. Obrigada!";
+        EN_TEXT.textContent = "Welcome! For the next entries, please use the physical key, which is hanging above the desk in your room. Thank you!";
       }
 
       // --- блокування після другого натискання ---
@@ -135,3 +135,4 @@
   </script>
 </body>
 </html>
+
