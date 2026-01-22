@@ -59,12 +59,17 @@
     const MAX_CLICKS = 2;
     const BLOCK_TIME = 10 * 60 * 1000; // 10 хвилин
 
+    const formatTime = (sec) => `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+
     // --- перевірка блокування при завантаженні ---
     const now = Date.now();
     const blockedUntil = localStorage.getItem("blockedUntil");
 
     if (blockedUntil && now < blockedUntil) {
       BUTTON.disabled = true;
+      // залишаємо повідомлення про ключ
+      PT_TEXT.textContent = "Por favor, use a chave, ela está na sala sobre a mesa. Obrigado!";
+      EN_TEXT.textContent = "Please use the key, it is hanging in the room above the table. Thank you!";
       const updateCountdown = () => {
         const msLeft = blockedUntil - Date.now();
         if (msLeft <= 0) {
@@ -100,7 +105,6 @@
       // --- дезактивація кнопки і таймер ---
       BUTTON.disabled = true;
       let countdown = WAIT_TIME;
-      const formatTime = (sec) => `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
       BUTTON.textContent = `Aguardar / Wait ${formatTime(countdown)}`;
 
       const timer = setInterval(() => {
