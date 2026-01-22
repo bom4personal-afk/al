@@ -55,7 +55,7 @@
     const PT_TEXT = document.getElementById("pt-text");
     const EN_TEXT = document.getElementById("en-text");
 
-    const WAIT_TIME = 20; // секунд
+    const WAIT_TIME = 20; // секунд після натискання
     const MAX_CLICKS = 2;
     const BLOCK_TIME = 10 * 60 * 1000; // 10 хвилин
 
@@ -66,11 +66,13 @@
     if (blockedUntil && now < blockedUntil) {
       BUTTON.disabled = true;
       const updateCountdown = () => {
-        const secondsLeft = Math.ceil((blockedUntil - Date.now()) / 1000);
-        if (secondsLeft <= 0) {
+        const msLeft = blockedUntil - Date.now();
+        if (msLeft <= 0) {
           location.reload();
         } else {
-          BUTTON.textContent = `Bloqueado / Locked ${secondsLeft}s`;
+          const minutes = Math.floor(msLeft / 60000);
+          const seconds = Math.floor((msLeft % 60000) / 1000);
+          BUTTON.textContent = `Bloqueado / Locked ${minutes}:${seconds.toString().padStart(2,'0')}`;
         }
       };
       updateCountdown();
@@ -98,11 +100,12 @@
       // --- дезактивація кнопки і таймер ---
       BUTTON.disabled = true;
       let countdown = WAIT_TIME;
-      BUTTON.textContent = `Aguardar / Wait ${countdown}s`;
+      const formatTime = (sec) => `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+      BUTTON.textContent = `Aguardar / Wait ${formatTime(countdown)}`;
 
       const timer = setInterval(() => {
         countdown--;
-        BUTTON.textContent = `Aguardar / Wait ${countdown}s`;
+        BUTTON.textContent = `Aguardar / Wait ${formatTime(countdown)}`;
         if (countdown <= 0) {
           clearInterval(timer);
           if (!localStorage.getItem("blockedUntil") || Date.now() >= localStorage.getItem("blockedUntil")) {
@@ -118,7 +121,6 @@
           headers: { "x-key": SECRET }
         });
         const data = await res.json();
-        // alert(data.ok ? "✅ OK" : "❌ Fail");
       } catch (e) {
         alert("error: " + e.message);
         clearInterval(timer);
