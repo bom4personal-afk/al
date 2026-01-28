@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open the door</title>
+  <title>Shelly Opener</title>
   <style>
     html, body {
       height: 100%;
@@ -11,19 +11,12 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       background: #0f172a;
       color: #fff;
-    }
-    .wrapper {
-      height: 100%;
       display: flex;
-      flex-direction: column;
-      padding: 0 16px;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
     button {
-      width: 80%;
-      max-width: 320px;
-      padding: 24px;
+      padding: 24px 40px;
       font-size: 20px;
       border: none;
       border-radius: 16px;
@@ -36,115 +29,40 @@
       transform: scale(0.97);
       background: #16a34a;
     }
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <h3 id="pt-text">Para abrir a porta do prédio, pressione o botão.</h3>
-    <h3 id="en-text">To open the building door, press the button.</h3>
-    <button id="btn">Abrir prédio / Open building</button>
-  </div>
+  <button id="openBtn">Abrir / Open</button>
 
   <script>
     const WORKER_URL = "https://shelly-opener.wl-image-proxy.workers.dev";
-    const SECRET = "banana-coffee-robot";
-    const BUTTON = document.getElementById("btn");
-    const PT_TEXT = document.getElementById("pt-text");
-    const EN_TEXT = document.getElementById("en-text");
-    const TEXT_PT_CONTENT = "Seja bem-vindo! Para as entradas seguintes, por favor, use a chave física, que está pendurada acima da secretária do seu quarto. Obrigado!"
-    const TEXT_EN_CONTENT = "Welcome! For the next entries, please use the physical key, which is hanging above the desk in your room. Thank you!"
-    
-    const WAIT_TIME = 20; // секунд після 1-го натискання
-    const MAX_CLICKS = 2;
-    const BLOCK_TIME = 10 * 60 * 1000; // 10 хвилин блокування після 2-го кліку
-    const formatTime = (sec) => `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
 
-    // --- перевірка блокування при завантаженні ---
-    const now = Date.now();
-    const blockedUntil = localStorage.getItem("blockedUntil");
+    document.getElementById("openBtn").onclick = async () => {
+      const btn = document.getElementById("openBtn");
+      btn.disabled = true;
+      let countdown = 15;
+      const originalText = btn.textContent;
 
-    if (blockedUntil && now < blockedUntil) {
-      BUTTON.disabled = true;
-      PT_TEXT.textContent = TEXT_PT_CONTENT;
-      EN_TEXT.textContent = TEXT_EN_CONTENT;
-
-      const updateCountdown = () => {
-        const msLeft = blockedUntil - Date.now();
-        if (msLeft <= 0) {
-          location.reload();
-        } else {
-          const minutes = Math.floor(msLeft / 60000);
-          const seconds = Math.floor((msLeft % 60000) / 1000);
-          BUTTON.textContent = `Bloqueado / Locked ${minutes}:${seconds.toString().padStart(2,'0')}`;
+      // Текст і таймер
+      const timer = setInterval(() => {
+        btn.textContent = `Aguardar / Wait ${countdown}s`;
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(timer);
+          btn.textContent = originalText;
+          btn.disabled = false;
         }
-      };
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    }
+      }, 1000);
 
-    BUTTON.onclick = async () => {
-      let clicks = Number(localStorage.getItem("clicks") || 0);
-      clicks++;
-      localStorage.setItem("clicks", clicks);
-
-      // --- повідомлення після першого натискання ---
-      if (clicks === 1) {
-        PT_TEXT.textContent = TEXT_PT_CONTENT;
-        EN_TEXT.textContent = TEXT_EN_CONTENT;
-
-        // Таймер 20 секунд після першого натискання
-        BUTTON.disabled = true;
-        let countdown = WAIT_TIME;
-        BUTTON.textContent = `Aguardar / Wait ${formatTime(countdown)}`;
-
-        const timer = setInterval(() => {
-          countdown--;
-          BUTTON.textContent = `Aguardar / Wait ${formatTime(countdown)}`;
-          if (countdown <= 0) {
-            clearInterval(timer);
-            BUTTON.disabled = false;
-            BUTTON.textContent = "Abrir prédio / Open building";
-          }
-        }, 1000);
-      }
-
-      // --- блокування після другого натискання ---
-      if (clicks >= MAX_CLICKS) {
-        localStorage.setItem("blockedUntil", Date.now() + BLOCK_TIME);
-        localStorage.removeItem("clicks");
-        BUTTON.disabled = true;
-        PT_TEXT.textContent = TEXT_PT_CONTENT;
-        EN_TEXT.textContent = TEXT_EN_CONTENT;
-
-        const updateCountdown = () => {
-          const msLeft = localStorage.getItem("blockedUntil") - Date.now();
-          if (msLeft <= 0) {
-            location.reload();
-          } else {
-            const minutes = Math.floor(msLeft / 60000);
-            const seconds = Math.floor((msLeft % 60000) / 1000);
-            BUTTON.textContent = `Bloqueado / Locked ${minutes}:${seconds.toString().padStart(2,'0')}`;
-          }
-        };
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-      }
-
-      // --- надсилаємо запит до воркера ---
       try {
         const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "x-key": SECRET }
+          method: "POST"
         });
+
         const data = await res.json();
-      } catch (e) {
-        alert("error: " + e.message);
-        BUTTON.disabled = false;
-        BUTTON.textContent = "Abrir prédio / Open building";
+        console.log("Response:", data);
+      } catch (err) {
+        console.error("Error:", err);
       }
     };
   </script>
