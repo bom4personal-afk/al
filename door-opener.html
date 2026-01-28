@@ -39,20 +39,6 @@
 
     document.getElementById("openBtn").onclick = async () => {
       const btn = document.getElementById("openBtn");
-      btn.disabled = true;
-      let countdown = 15;
-      const originalText = btn.textContent;
-
-      // Текст і таймер
-      const timer = setInterval(() => {
-        btn.textContent = `Aguardar / Wait ${countdown}s`;
-        countdown--;
-        if (countdown < 0) {
-          clearInterval(timer);
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }
-      }, 1000);
 
       try {
         const res = await fetch(WORKER_URL, {
