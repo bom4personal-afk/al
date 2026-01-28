@@ -9,25 +9,26 @@
       height: 100%;
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0f172a;
-      color: #fff;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     button {
-      padding: 24px 40px;
-      font-size: 20px;
+      padding: 24px 50px;
+      font-size: 22px;
       border: none;
-      border-radius: 16px;
-      background: #22c55e;
-      color: #022c22;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #FFD700, #FFC107);
+      color: #000;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.1s ease, background 0.2s ease;
+      box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4);
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
     }
     button:active {
       transform: scale(0.97);
-      background: #16a34a;
+      box-shadow: 0 2px 4px rgba(255, 215, 0, 0.4);
     }
   </style>
 </head>
@@ -38,17 +39,12 @@
     const WORKER_URL = "https://shelly-opener.wl-image-proxy.workers.dev";
 
     document.getElementById("openBtn").onclick = async () => {
-      const btn = document.getElementById("openBtn");
-
       try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST"
-        });
-
+        const res = await fetch(WORKER_URL, { method: "POST" });
         const data = await res.json();
-        console.log("Response:", data);
+        console.log("Response from worker:", data);
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error calling worker:", err);
       }
     };
   </script>
